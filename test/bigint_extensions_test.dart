@@ -14,16 +14,16 @@ void main() {
     group('toBytes', () {
       test('64-bit integer', () {
         var sut = BigInt.from(0xFEDCBA9876543210);
-        expect(sut.toBytes(Endian.big),
+        expect(sut.toBytes(endian: Endian.big),
             [0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]);
-        expect(sut.toBytes(Endian.little),
+        expect(sut.toBytes(endian: Endian.little),
             [0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE]);
 
         // Same as above number
         sut = BigInt.from(-81985529216486896);
-        expect(sut.toBytes(Endian.big),
+        expect(sut.toBytes(endian: Endian.big),
             [0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]);
-        expect(sut.toBytes(Endian.little),
+        expect(sut.toBytes(endian: Endian.little),
             [0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE]);
 
         // Not the same as above, but same bytes
@@ -32,16 +32,22 @@ void main() {
         // this value as unsigned. So while the bytes are the same as both
         // instances above, comparing the two will return false
         sut = BigInt.parse('FEDCBA9876543210', radix: 16);
-        expect(sut.toBytes(Endian.big),
+        expect(sut.toBytes(endian: Endian.big),
             [0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]);
-        expect(sut.toBytes(Endian.little),
+        expect(sut.toBytes(endian: Endian.little),
             [0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE]);
+      });
+
+      test('negative numbers', () {
+        // 0x9876 -- -26506
+        final sut = BigInt.from(-26506);
+        expect(sut.toBytes(endian: Endian.big), [0x98, 0x76]);
       });
 
       test('extra large number', () {
         final sut = BigInt.parse('FEDCBA9876543210FEDCBA9876543210', radix: 16);
         expect(
-          sut.toBytes(Endian.big),
+          sut.toBytes(endian: Endian.big),
           [
             0xFE,
             0xDC,
@@ -62,7 +68,7 @@ void main() {
           ],
         );
         expect(
-          sut.toBytes(Endian.little),
+          sut.toBytes(endian: Endian.little),
           [
             0x10,
             0x32,
@@ -87,17 +93,19 @@ void main() {
       test('maxBytes', () {
         // Truncate
         var sut = BigInt.parse('FEDCBA9876543210FEDCBA9876543210', radix: 16);
-        expect(sut.toBytes(Endian.big, 4), [0x76, 0x54, 0x32, 0x10]);
-        expect(sut.toBytes(Endian.little, 4), [0x10, 0x32, 0x54, 0x76]);
+        expect(sut.toBytes(endian: Endian.big, maxBytes: 4),
+            [0x76, 0x54, 0x32, 0x10]);
+        expect(sut.toBytes(endian: Endian.little, maxBytes: 4),
+            [0x10, 0x32, 0x54, 0x76]);
 
         // Pad
         sut = BigInt.parse('76543210', radix: 16);
         expect(
-          sut.toBytes(Endian.big, 6),
+          sut.toBytes(endian: Endian.big, maxBytes: 6),
           [0x00, 0x00, 0x76, 0x54, 0x32, 0x10],
         );
         expect(
-          sut.toBytes(Endian.little, 6),
+          sut.toBytes(endian: Endian.little, maxBytes: 6),
           [0x10, 0x32, 0x54, 0x76, 0x00, 0x00],
         );
       });
@@ -110,20 +118,26 @@ void main() {
         var expected = BigInt.parse('FEDCBA9876543210', radix: 16);
         expect(
             [0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]
-                .toBigInt(Endian.big),
+                .toBigInt(endian: Endian.big),
             expected);
         expect(
             [0x00, 0x00, 0x00, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]
-                .toBigInt(Endian.big),
+                .toBigInt(endian: Endian.big),
             expected);
         expect(
             [0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE]
-                .toBigInt(Endian.little),
+                .toBigInt(endian: Endian.little),
             expected);
         expect(
             [0x10, 0x32, 0x54, 0x76, 0x98, 0xBA, 0xDC, 0xFE, 0x00, 0x00, 0x00]
-                .toBigInt(Endian.little),
+                .toBigInt(endian: Endian.little),
             expected);
+      });
+
+      test('negative numbers', () {
+        // 0x9876 -- -26506
+        expect([0x98, 0x76].toBigInt(endian: Endian.big, signed: true),
+            BigInt.from(-26506));
       });
     });
   });

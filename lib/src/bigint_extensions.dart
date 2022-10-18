@@ -3,7 +3,7 @@ import 'dart:typed_data';
 import 'package:byte_extensions/src/helpers.dart';
 
 // This code heavily based on https://github.com/dart-lang/sdk/issues/32803#issuecomment-387405784
-// but with added endian handling
+// but with added endian and sign-bit handling
 
 /// A BigInt representing 256
 final _b256 = BigInt.from(256);
@@ -14,9 +14,7 @@ extension BigIntToBytesExtension on BigInt {
   /// If [maxBytes] is set, then it will ensure the result is fixed length such that:
   /// 1) If the [maxBytes] is less than our number of bytes, the more significant bytes are truncated.
   /// 2) If the [maxBytes] is greater than our number of bytes, the more significant bytes are set to 0x00.
-  Uint8ClampedList toBytes([Endian endian = Endian.big, int? maxBytes]) {
-    // Negative numbers?
-
+  Uint8ClampedList toBytes({Endian endian = Endian.big, int? maxBytes}) {
     final bytes = (bitLength + 7) >> 3; // How many bytes are in the final list
     final parsed = Uint8List(bytes); // Our result
 
@@ -48,7 +46,12 @@ extension BigIntToBytesExtension on BigInt {
 /// Extension to add our `toBigInt` handling to List<int>
 extension IntListToBigIntExtension on List<int> {
   /// Convert a list of bytes to a BigInt. Endianness can be changed by passing [endian].
-  BigInt toBigInt([Endian endian = Endian.big]) {
+  /// If you want to treat the list as if it weree signed, then set [signed] to true.
+  ///
+  /// With signed return values, the bit length is to the nearest byte.
+  /// For example, while 0b101 is signed as a 3-bit integer, this method will treat the
+  /// value as if it is 0b00000101 for the purpose of evaluating the sign bit.
+  BigInt toBigInt({Endian endian = Endian.big, bool signed = false}) {
     // binary search conversion to convert 4-bytes at a time
     BigInt read(int start, int end) {
       if (end - start <= 4) {
@@ -74,10 +77,10 @@ extension IntListToBigIntExtension on List<int> {
         // Move the front bits to the left
         front <<= ((end - mid) * 8);
       }
-      final result = front + back;
-      return result;
+      return front + back;
     }
 
-    return read(0, length);
+    var result = read(0, length);
+    return signed ? result.toSigned(length * 8) : result;
   }
 }
