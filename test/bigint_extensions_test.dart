@@ -42,6 +42,7 @@ void main() {
         // 0x9876 -- -26506
         final sut = BigInt.from(-26506);
         expect(sut.toBytes(endian: Endian.big), [0x98, 0x76]);
+        expect(sut.toBytes(endian: Endian.little), [0x76, 0x98]);
       });
 
       test('extra large number', () {
@@ -137,6 +138,8 @@ void main() {
       test('negative numbers', () {
         // 0x9876 -- -26506
         expect([0x98, 0x76].toBigInt(endian: Endian.big, signed: true),
+            BigInt.from(-26506));
+        expect([0x76, 0x98].toBigInt(endian: Endian.little, signed: true),
             BigInt.from(-26506));
       });
     });
