@@ -142,6 +142,10 @@ void main() {
         expect([0x76, 0x98].asBigInt(endian: Endian.little, signed: true),
             BigInt.from(-26506));
       });
+
+      test('out-of-range integers', () {
+        expect([256, -123, 0, 300, -1].asBigInt(), BigInt.from(0xFF0000FF00));
+      });
     });
   });
 }

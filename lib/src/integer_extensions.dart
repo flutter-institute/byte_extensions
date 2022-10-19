@@ -84,7 +84,7 @@ extension IntegerToBytesExtensions on int {
 
 /// Extension to add our `asInt` handling to List<int>
 extension IntListToIntegerExtension on List<int> {
-  /// Convert the presumed-to-be-byte list to an integer.
+  /// Convert a list of bytes to an integer.
   /// The endianness we should treat the byte list with can be changed using [endian].
   ///
   /// All values in the list are assumed to be valid bytes. Any values greater than 0xFF
