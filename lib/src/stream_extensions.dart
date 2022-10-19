@@ -12,11 +12,7 @@ extension StreamReadIntExtension on Stream<int> {
     Endian endian = Endian.big,
     IntType type = IntType.int64,
   }) async {
-    final bytes = <int>[];
-    await for (var b in take(type.bytesPerElement)) {
-      bytes.add(b);
-    }
-
+    final bytes = await take(type.bytesPerElement).toList();
     return bytes.asInt(endian: endian, type: type);
   }
 
@@ -27,11 +23,7 @@ extension StreamReadIntExtension on Stream<int> {
     Endian endian = Endian.big,
     bool signed = false,
   }) async {
-    final bytes = <int>[];
-    await for (var b in take(maxBytes)) {
-      bytes.add(b);
-    }
-
+    final bytes = await take(maxBytes).toList();
     return bytes.asBigInt(endian: endian, signed: signed);
   }
 
@@ -40,11 +32,7 @@ extension StreamReadIntExtension on Stream<int> {
     Endian endian = Endian.big,
     Precision precision = Precision.double,
   }) async {
-    final bytes = <int>[];
-    await for (var b in take(precision.bytesPerElement)) {
-      bytes.add(b);
-    }
-
+    final bytes = await take(precision.bytesPerElement).toList();
     return bytes.asDouble(endian: endian, precision: precision);
   }
 }
