@@ -11,7 +11,7 @@ void main() {
       expect(sut.asBytes().asBigInt(), sut);
     });
 
-    group('toBytes', () {
+    group('asBytes', () {
       test('64-bit integer', () {
         var sut = BigInt.from(0xFEDCBA9876543210);
         expect(sut.asBytes(endian: Endian.big),
@@ -114,7 +114,7 @@ void main() {
   });
 
   group('list<int> extensions', () {
-    group('toBigInt', () {
+    group('asBigInt', () {
       test('numbers', () {
         var expected = BigInt.parse('FEDCBA9876543210', radix: 16);
         expect(

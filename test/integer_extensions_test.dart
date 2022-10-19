@@ -27,7 +27,7 @@ void main() {
           sut.toSigned(8));
     });
 
-    group('toBytes', () {
+    group('asBytes', () {
       test('converts 64-bit int', () {
         // -81985529216486896
         expect(
@@ -128,7 +128,7 @@ void main() {
   });
 
   group('list<int> extensions', () {
-    group('toInt', () {
+    group('asInt', () {
       test('byte value is out of range or negative', () {
         expect(
           [256, 256].asInt(),
