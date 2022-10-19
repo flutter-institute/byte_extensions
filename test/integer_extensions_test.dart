@@ -132,15 +132,15 @@ void main() {
       test('byte value is out of range or negative', () {
         expect(
           [256, 256].asInt(),
-          0,
+          0xFFFF,
         );
         expect(
           [0x10, 256, 0x50].asInt(endian: Endian.big, type: IntType.uint64),
-          0x100050,
+          0x10FF50,
         );
         expect(
           [0x10, 300, 0x50].asInt(endian: Endian.big, type: IntType.uint64),
-          0x102C50,
+          0x10FF50,
         );
 
         expect(
@@ -149,16 +149,16 @@ void main() {
         );
         expect(
           [0x10, -300, 0x50].asInt(endian: Endian.big, type: IntType.uint64),
-          0x10D450,
+          0x100050,
         );
 
         expect(
           [0x10, -1, 0x50].asInt(endian: Endian.big, type: IntType.uint64),
-          0x10FF50,
+          0x100050,
         );
         expect(
           [0x10, -255, 0x50].asInt(endian: Endian.big, type: IntType.uint64),
-          0x100150,
+          0x100050,
         );
       });
 

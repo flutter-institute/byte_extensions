@@ -14,7 +14,7 @@ const _int16Size = Int16List.bytesPerElement;
 /// Numbers of bytes for an 8-bit int
 const _int8Size = Int8List.bytesPerElement;
 
-/// Enum to denote the size of integers that we are working with
+/// Enum to denote the type of integers that we are working with
 enum IntType {
   /// A 64-bit signed integer
   int64,
@@ -41,7 +41,7 @@ enum IntType {
   uint8,
 }
 
-/// Extension to add `asBytes` handling to the int
+/// Extension to add `asBytes` handling to int
 extension IntegerToBytesExtensions on int {
   /// Convert this integer to a fixed-length byte list
   /// To control the endianness of the resulting list, use the [endian] parameter
@@ -87,20 +87,14 @@ extension IntListToIntegerExtension on List<int> {
   /// Convert the presumed-to-be-byte list to an integer.
   /// The endianness we should treat the byte list with can be changed using [endian].
   ///
-  /// All values in the list are assumed to be valid bytes, so only the first byte worth
-  /// of data for any given value is used. Negative values have the first byte of their
-  /// two's compliment used as the value.
-  ///
-  /// For example:
-  ///   256 (0x100) is truncated to 0x00
-  ///   300 (0x12C) is truncated to 0x2C
-  ///   -300 (0xED4) is truncated to 0xD4
+  /// All values in the list are assumed to be valid bytes. Any values greater than 0xFF
+  /// become 0xFF and any values less than 0 become 0.
   int asInt({Endian endian = Endian.big, IntType type = IntType.int64}) {
     /// Converts our backing list to ByteData while ensuring that we are
     /// handling the correct number of bytes.
     ByteData toByteData(int bytesPerElement) {
-      final bytes =
-          Uint8List.fromList(endianFixedLength(this, bytesPerElement, endian));
+      final bytes = Uint8ClampedList.fromList(
+          endianFixedLength(this, bytesPerElement, endian));
       return bytes.buffer.asByteData();
     }
 
