@@ -2,44 +2,7 @@ import 'dart:typed_data';
 
 import 'package:byte_extensions/src/helpers.dart';
 
-/// Number of bytes for a 64-bit int
-const _int64Size = Int64List.bytesPerElement;
-
-/// Number of bytes for a 32-bit int
-const _int32Size = Int32List.bytesPerElement;
-
-/// Number of bytes for a 16-bit int
-const _int16Size = Int16List.bytesPerElement;
-
-/// Numbers of bytes for an 8-bit int
-const _int8Size = Int8List.bytesPerElement;
-
-/// Enum to denote the type of integers that we are working with
-enum IntType {
-  /// A 64-bit signed integer
-  int64,
-
-  /// A 64-bit unsigned integer
-  uint64,
-
-  /// A 32-bit signed integer
-  int32,
-
-  /// A 32-bit unsigned integer
-  uint32,
-
-  /// A 16-bit signed integer
-  int16,
-
-  /// A 16-bit unsigned integer
-  uint16,
-
-  /// An 8-bit signed integer
-  int8,
-
-  /// An 8-bit unsigned integer
-  uint8,
-}
+import 'enums.dart';
 
 /// Extension to add `asBytes` handling to int
 extension IntegerToBytesExtensions on int {
@@ -58,27 +21,35 @@ extension IntegerToBytesExtensions on int {
     Endian endian = Endian.big,
     IntType type = IntType.int64,
   }) {
-    /// Helper function to convert our ByteData to a Uint8List
-    Uint8ClampedList clamp(ByteData bytes) => bytes.buffer.asUint8ClampedList();
-
+    final byteData = ByteData(type.bytesPerElement);
     switch (type) {
       case IntType.int64:
-        return clamp(ByteData(_int64Size)..setInt64(0, this, endian));
+        byteData.setInt64(0, this, endian);
+        break;
       case IntType.uint64:
-        return clamp(ByteData(_int64Size)..setUint64(0, this, endian));
+        byteData.setUint64(0, this, endian);
+        break;
       case IntType.int32:
-        return clamp(ByteData(_int32Size)..setInt32(0, this, endian));
+        byteData.setInt32(0, this, endian);
+        break;
       case IntType.uint32:
-        return clamp(ByteData(_int32Size)..setUint32(0, this, endian));
+        byteData.setUint32(0, this, endian);
+        break;
       case IntType.int16:
-        return clamp(ByteData(_int16Size)..setInt16(0, this, endian));
+        byteData.setInt16(0, this, endian);
+        break;
       case IntType.uint16:
-        return clamp(ByteData(_int16Size)..setUint16(0, this, endian));
+        byteData.setUint16(0, this, endian);
+        break;
       case IntType.int8:
-        return clamp(ByteData(_int8Size)..setInt8(0, this));
+        byteData.setInt8(0, this);
+        break;
       case IntType.uint8:
-        return clamp(ByteData(_int8Size)..setUint8(0, this));
+        byteData.setUint8(0, this);
+        break;
     }
+
+    return byteData.buffer.asUint8ClampedList();
   }
 }
 
@@ -90,31 +61,29 @@ extension IntListToIntegerExtension on List<int> {
   /// All values in the list are assumed to be valid bytes. Any values greater than 0xFF
   /// become 0xFF and any values less than 0 become 0.
   int asInt({Endian endian = Endian.big, IntType type = IntType.int64}) {
-    /// Converts our backing list to ByteData while ensuring that we are
-    /// handling the correct number of bytes.
-    ByteData toByteData(int bytesPerElement) {
-      final bytes = Uint8ClampedList.fromList(
-          endianFixedLength(this, bytesPerElement, endian));
-      return bytes.buffer.asByteData();
-    }
+    // Convert our backing list to ByteData while ensuring that we are
+    // handling the correct number of bytes.
+    final bytes = Uint8ClampedList.fromList(
+        endianFixedLength(this, type.bytesPerElement, endian));
+    final byteData = bytes.buffer.asByteData();
 
     switch (type) {
       case IntType.int64:
-        return toByteData(_int64Size).getInt64(0, endian);
+        return byteData.getInt64(0, endian);
       case IntType.uint64:
-        return toByteData(_int64Size).getUint64(0, endian);
+        return byteData.getUint64(0, endian);
       case IntType.int32:
-        return toByteData(_int32Size).getInt32(0, endian);
+        return byteData.getInt32(0, endian);
       case IntType.uint32:
-        return toByteData(_int32Size).getUint32(0, endian);
+        return byteData.getUint32(0, endian);
       case IntType.int16:
-        return toByteData(_int16Size).getInt16(0, endian);
+        return byteData.getInt16(0, endian);
       case IntType.uint16:
-        return toByteData(_int16Size).getUint16(0, endian);
+        return byteData.getUint16(0, endian);
       case IntType.int8:
-        return toByteData(_int8Size).getInt8(0);
+        return byteData.getInt8(0);
       case IntType.uint8:
-        return toByteData(_int8Size).getUint8(0);
+        return byteData.getUint8(0);
     }
   }
 }

@@ -1,19 +1,6 @@
 import 'dart:typed_data';
 
-/// Number of bytes for a 32-bit float
-const _floatSize = Float32List.bytesPerElement;
-
-/// Number of bytes for a 64-bit double
-const _doubleSize = Float64List.bytesPerElement;
-
-/// Enum to denote the type of double that we are working with
-enum Precision {
-  /// 32-bit single precision
-  float,
-
-  /// 64-bit double precision
-  double,
-}
+import 'enums.dart';
 
 /// Extension to add `asBytes` handling to double
 extension DoubleToBytesExtension on double {
@@ -21,17 +8,17 @@ extension DoubleToBytesExtension on double {
     Endian endian = Endian.big,
     Precision precision = Precision.double,
   }) {
-    /// Helper function to convert our ByteData to a Uint8List
-    Uint8ClampedList clamp(ByteData bytes) {
-      return bytes.buffer.asUint8ClampedList();
-    }
-
+    final byteData = ByteData(precision.bytesPerElement);
     switch (precision) {
       case Precision.float:
-        return clamp(ByteData(_floatSize)..setFloat32(0, this, endian));
+        byteData.setFloat32(0, this, endian);
+        break;
       case Precision.double:
-        return clamp(ByteData(_doubleSize)..setFloat64(0, this, endian));
+        byteData.setFloat64(0, this, endian);
+        break;
     }
+
+    return byteData.buffer.asUint8ClampedList();
   }
 }
 
@@ -46,9 +33,8 @@ extension ListIntToDoubleExtension on List<int> {
     Endian endian = Endian.big,
     Precision precision = Precision.double,
   }) {
-    /// Converts our backing list to ByteData
-    ByteData toBytesData() =>
-        Uint8ClampedList.fromList(this).buffer.asByteData();
+    // Convert our backing list to ByteData
+    final byteData = Uint8ClampedList.fromList(this).buffer.asByteData();
 
     switch (precision) {
       case Precision.float:
@@ -56,13 +42,13 @@ extension ListIntToDoubleExtension on List<int> {
           throw ArgumentError(
               'Invalid Argument: List must be exactly 4 bytes long');
         }
-        return toBytesData().getFloat32(0, endian);
+        return byteData.getFloat32(0, endian);
       case Precision.double:
         if (length != 8) {
           throw ArgumentError(
               'Invalid Argument: List must be exactly 8 bytes long');
         }
-        return toBytesData().getFloat64(0, endian);
+        return byteData.getFloat64(0, endian);
     }
   }
 }
