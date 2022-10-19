@@ -8,13 +8,13 @@ import 'package:byte_extensions/src/helpers.dart';
 /// A BigInt representing 256
 final _b256 = BigInt.from(256);
 
-/// Extension to add our `toBytes` handling to BigInt
+/// Extension to add our `asBytes` handling to BigInt
 extension BigIntToBytesExtension on BigInt {
   /// Convert a BigInt to bytes with respect to Endianness of [endian].
   /// If [maxBytes] is set, then it will ensure the result is fixed length such that:
   /// 1) If the [maxBytes] is less than our number of bytes, the more significant bytes are truncated.
   /// 2) If the [maxBytes] is greater than our number of bytes, the more significant bytes are set to 0x00.
-  Uint8ClampedList toBytes({Endian endian = Endian.big, int? maxBytes}) {
+  Uint8ClampedList asBytes({Endian endian = Endian.big, int? maxBytes}) {
     final bytes = (bitLength + 7) >> 3; // How many bytes are in the final list
     final parsed = Uint8List(bytes); // Our result
 
@@ -43,7 +43,7 @@ extension BigIntToBytesExtension on BigInt {
   }
 }
 
-/// Extension to add our `toBigInt` handling to List<int>
+/// Extension to add our `asBigInt` handling to List<int>
 extension IntListToBigIntExtension on List<int> {
   /// Convert a list of bytes to a BigInt. Endianness can be changed by passing [endian].
   /// If you want to treat the list as if it weree signed, then set [signed] to true.
@@ -51,7 +51,7 @@ extension IntListToBigIntExtension on List<int> {
   /// With signed return values, the bit length is to the nearest byte.
   /// For example, while 0b101 is signed as a 3-bit integer, this method will treat the
   /// value as if it is 0b00000101 for the purpose of evaluating the sign bit.
-  BigInt toBigInt({Endian endian = Endian.big, bool signed = false}) {
+  BigInt asBigInt({Endian endian = Endian.big, bool signed = false}) {
     // binary search conversion to convert 4-bytes at a time
     BigInt read(int start, int end) {
       if (end - start <= 4) {

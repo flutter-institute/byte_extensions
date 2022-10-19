@@ -41,6 +41,7 @@ enum IntType {
   uint8,
 }
 
+/// Extension to add `asBytes` handling to the int
 extension IntegerToBytesExtensions on int {
   /// Convert this integer to a fixed-length byte list
   /// To control the endianness of the resulting list, use the [endian] parameter
@@ -53,7 +54,7 @@ extension IntegerToBytesExtensions on int {
   /// For example:
   ///   0x109876 which positive when converted to int16 becomes -26608 because the value
   ///     is truncated to 0x9876 before conversion and the sign bit is now 1
-  Uint8ClampedList toBytes({
+  Uint8ClampedList asBytes({
     Endian endian = Endian.big,
     IntType type = IntType.int64,
   }) {
@@ -81,6 +82,7 @@ extension IntegerToBytesExtensions on int {
   }
 }
 
+/// Extension to add our `asInt` handling to List<int>
 extension IntListToIntegerExtension on List<int> {
   /// Convert the presumed-to-be-byte list to an integer.
   /// The endianness we should treat the byte list with can be changed using [endian].
@@ -93,7 +95,7 @@ extension IntListToIntegerExtension on List<int> {
   ///   256 (0x100) is truncated to 0x00
   ///   300 (0x12C) is truncated to 0x2C
   ///   -300 (0xED4) is truncated to 0xD4
-  int toInt({Endian endian = Endian.big, IntType type = IntType.int64}) {
+  int asInt({Endian endian = Endian.big, IntType type = IntType.int64}) {
     /// Converts our backing list to ByteData while ensuring that we are
     /// handling the correct number of bytes.
     ByteData toByteData(int bytesPerElement) {
