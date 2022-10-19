@@ -1,14 +1,3 @@
-// TODO extension to allow for the following
-// abstract stream transformation to automatically decode
-// int8 -> int64
-// uint8 -> uint64
-// float32
-// double64
-
-// It might make sense to use this: https://pub.dev/packages/chunked_stream/example
-// we would only have the one dependency, but I don't know
-
-import 'dart:math';
 import 'dart:typed_data';
 
 import 'enums.dart';
