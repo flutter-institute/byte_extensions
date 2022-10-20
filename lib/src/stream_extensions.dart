@@ -4,6 +4,7 @@ import 'enums.dart';
 import 'integer_extensions.dart';
 import 'bigint_extensions.dart';
 import 'double_extensions.dart';
+import 'stream_transformers.dart';
 
 /// Extension to add our helper methods onto int streams
 extension StreamReadIntExtension on Stream<int> {
@@ -16,6 +17,16 @@ extension StreamReadIntExtension on Stream<int> {
     return bytes.asInt(endian: endian, type: type);
   }
 
+  /// Transform this stream into an integer stream
+  Stream<int> asIntStream({
+    Endian endian = Endian.big,
+    IntType type = IntType.int64,
+    bool sync = false,
+    bool cancelOnError = false,
+  }) =>
+      transform(IntegerByteStreamTransformer(endian, type,
+          sync: sync, cancelOnError: cancelOnError));
+
   /// Read a list of bytes from the stream and convert them to a BigInt respecting [endian]ness.
   /// Treated as an unsigned value by default, to change set [signed] to `true`.
   Future<BigInt> readBigInt(
@@ -27,6 +38,17 @@ extension StreamReadIntExtension on Stream<int> {
     return bytes.asBigInt(endian: endian, signed: signed);
   }
 
+  /// Transform this stream into a BigInt stream
+  Stream<BigInt> asBigIntStream(
+    int maxBytes, {
+    Endian endian = Endian.big,
+    bool signed = false,
+    bool sync = false,
+    bool cancelOnError = false,
+  }) =>
+      transform(BigIntByteStreamTransformer(endian, maxBytes,
+          signed: signed, sync: sync, cancelOnError: cancelOnError));
+
   /// Read a list of bytes from the stream and convert them to a double respecting [endian]ness.
   Future<double> readDouble({
     Endian endian = Endian.big,
@@ -35,4 +57,14 @@ extension StreamReadIntExtension on Stream<int> {
     final bytes = await take(precision.bytesPerElement).toList();
     return bytes.asDouble(endian: endian, precision: precision);
   }
+
+  /// Transform this stream into a double stream
+  Stream<double> asDoubleStream({
+    Endian endian = Endian.big,
+    Precision precision = Precision.double,
+    bool sync = false,
+    bool cancelOnError = false,
+  }) =>
+      transform(DoubleByteStreamTransformer(endian, precision,
+          sync: sync, cancelOnError: cancelOnError));
 }

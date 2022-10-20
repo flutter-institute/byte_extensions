@@ -6,3 +6,5 @@ export 'src/double_extensions.dart';
 export 'src/bigint_extensions.dart';
 export 'src/string_extensions.dart';
 export 'src/stream_extensions.dart';
+
+export 'src/stream_transformers.dart';

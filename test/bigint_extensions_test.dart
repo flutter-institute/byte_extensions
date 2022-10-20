@@ -115,7 +115,7 @@ void main() {
 
   group('list<int> extensions', () {
     group('asBigInt', () {
-      test('numbers', () {
+      test('positive numbers', () {
         final expected = BigInt.parse('FEDCBA9876543210', radix: 16);
         expect(
             [0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]
