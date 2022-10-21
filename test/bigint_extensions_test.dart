@@ -141,6 +141,17 @@ void main() {
             BigInt.from(-26506));
         expect([0x76, 0x98].asBigInt(endian: Endian.little, signed: true),
             BigInt.from(-26506));
+
+        expect(
+            [0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]
+                .asBigInt(endian: Endian.big, signed: true),
+            BigInt.from(-81985529216486896));
+
+        // Leading zeros prevent negavity
+        expect(
+            [0x00, 0x00, 0x00, 0xFE, 0xDC, 0xBA, 0x98, 0x76, 0x54, 0x32, 0x10]
+                .asBigInt(endian: Endian.big, signed: true),
+            BigInt.parse('FEDCBA9876543210', radix: 16));
       });
 
       test('out-of-range integers', () {
