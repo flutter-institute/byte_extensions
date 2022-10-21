@@ -7,7 +7,7 @@ import 'double_extensions.dart';
 import 'stream_transformers.dart';
 
 /// Extension to add our helper methods onto int streams
-extension StreamReadIntExtension on Stream<int> {
+extension IntStreamTransformExtension on Stream<int> {
   /// Read a list of bytes from the stream and convert them to an integer respecting [endian]ness.
   Future<int> readInt({
     Endian endian = Endian.big,
@@ -66,5 +66,39 @@ extension StreamReadIntExtension on Stream<int> {
     bool cancelOnError = false,
   }) =>
       transform(DoubleByteStreamTransformer(endian, precision,
+          sync: sync, cancelOnError: cancelOnError));
+}
+
+/// Extension to add our helper methods onto int list streams
+extension IntListStreamTransformExtension on Stream<List<int>> {
+  /// Transform this stream into an integer stream
+  Stream<int> asIntStream({
+    Endian endian = Endian.big,
+    IntType type = IntType.int64,
+    bool sync = false,
+    bool cancelOnError = false,
+  }) =>
+      transform(IntegerByteListStreamTransformer(endian, type,
+          sync: sync, cancelOnError: cancelOnError));
+
+  /// Transform this stream into a BigInt stream
+  Stream<BigInt> asBigIntStream(
+    int maxBytes, {
+    Endian endian = Endian.big,
+    bool signed = false,
+    bool sync = false,
+    bool cancelOnError = false,
+  }) =>
+      transform(BigIntByteListStreamTransformer(endian, maxBytes,
+          signed: signed, sync: sync, cancelOnError: cancelOnError));
+
+  /// Transform this stream into a double stream
+  Stream<double> asDoubleStream({
+    Endian endian = Endian.big,
+    Precision precision = Precision.double,
+    bool sync = false,
+    bool cancelOnError = false,
+  }) =>
+      transform(DoubleByteListStreamTransformer(endian, precision,
           sync: sync, cancelOnError: cancelOnError));
 }
