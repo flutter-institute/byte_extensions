@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'enums.dart';
+import '../enums.dart';
 
 /// Extension to add `asBytes` handling to double
 extension DoubleToBytesExtension on double {

@@ -1,10 +1,10 @@
 import 'dart:typed_data';
 
-import 'enums.dart';
+import '../enums.dart';
 import 'integer_extensions.dart';
 import 'bigint_extensions.dart';
 import 'double_extensions.dart';
-import 'stream_transformers.dart';
+import '../transformers/stream_transformers.dart';
 
 /// Extension to add our helper methods onto int streams
 extension IntStreamTransformExtension on Stream<int> {

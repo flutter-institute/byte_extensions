@@ -1,8 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:byte_extensions/src/helpers.dart';
-
-import 'enums.dart';
+import '../enums.dart';
+import '../helpers.dart';
 
 /// Extension to add `asBytes` handling to int
 extension IntegerToBytesExtensions on int {

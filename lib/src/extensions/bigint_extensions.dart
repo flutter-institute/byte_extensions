@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:byte_extensions/src/helpers.dart';
+import '../helpers.dart';
 
 // This code heavily based on https://github.com/dart-lang/sdk/issues/32803#issuecomment-387405784
 // but with added endian and sign-bit handling
