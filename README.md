@@ -1,3 +1,7 @@
+[![Codemagic build status](https://api.codemagic.io/apps/635325804fab5561a16a6d79/635325804fab5561a16a6d78/status_badge.svg)](https://codemagic.io/apps/635325804fab5561a16a6d79/635325804fab5561a16a6d78/latest_build)
+
+[![Pub Version](https://img.shields.io/pub/v/byte_extensions)](https://pub.dev/packages/byte_extensions)
+
 This package provides some helpful extensions for common types to convert them to and from their byte equivalents.
 
 ## Features
