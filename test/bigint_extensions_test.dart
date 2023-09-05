@@ -7,7 +7,14 @@ import 'package:byte_extensions/byte_extensions.dart';
 void main() {
   group('BigInt extensions', () {
     test('identity', () {
-      final sut = BigInt.parse('FEDCBA98', radix: 16);
+      var sut = BigInt.parse('FEDCBA98', radix: 16);
+      expect(sut.asBytes().asBigInt(), sut);
+      // Test for numbers divisible by 256 [#1]
+      sut = BigInt.from(256);
+      expect(sut.asBytes().asBigInt(), sut);
+      sut = BigInt.from(65792);
+      expect(sut.asBytes().asBigInt(), sut);
+      sut = BigInt.from(131328);
       expect(sut.asBytes().asBigInt(), sut);
     });
 
