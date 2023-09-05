@@ -79,7 +79,12 @@ void main() {
         // nan
         expect(
           double.nan.asBytes(endian: Endian.big, precision: Precision.double),
-          [0xFF, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00],
+          anyOf(
+            // Sign bit 1
+            equals([0xFF, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
+            // Sign bit 0
+            equals([0x7F, 0xF8, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]),
+          ),
         );
 
         // min/max
@@ -152,7 +157,12 @@ void main() {
         // nan
         expect(
           double.nan.asBytes(endian: Endian.big, precision: Precision.float),
-          [0xFF, 0xC0, 0x00, 0x00],
+          anyOf(
+            // Sign bit 1
+            equals([0xFF, 0xC0, 0x00, 0x00]),
+            // Sign bit 0
+            equals([0x7F, 0xC0, 0x00, 0x00]),
+          ),
         );
 
         // min/max

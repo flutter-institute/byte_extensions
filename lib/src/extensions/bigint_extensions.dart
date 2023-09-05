@@ -21,13 +21,23 @@ extension BigIntToBytesExtension on BigInt {
     // Break the big int into individual bytes.
     // This conversion results in little endian ordering.
     var number = this;
+    var lastNonZeroByte = -1;
     for (int i = 0; i < bytes; i++) {
-      parsed[i] = number.remainder(_b256).toInt();
+      var byte = number.remainder(_b256).toInt();
+      parsed[i] = byte;
       number = number >> 8;
+
+      if (byte > 0) {
+        lastNonZeroByte = i;
+      }
     }
 
-    // Strip any leading 0's, since they're extraneous at this point
-    var result = parsed.skipWhile((value) => value == 0x00).toList();
+    // Strip any trailing 0's, since they're extraneous at this point
+    List<int> result = parsed;
+    if (lastNonZeroByte >= 0) {
+      result = parsed.sublist(0, lastNonZeroByte + 1);
+    }
+
     // Reverse the list if we want big endian order
     if (endian == Endian.big) {
       result = result.reversed.toList();
