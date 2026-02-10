@@ -1,3 +1,8 @@
+## 0.0.4
+
+* Fixing Statis Analysis issues
+* Updating to latest version of lints and test packages
+
 ## 0.0.3
 
 * Bugfix: fixing improperly zero trimming for BigInts divisible by 256

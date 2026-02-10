@@ -1,6 +1,6 @@
 part of 'stream_transformers.dart';
 
-/// Base class to handle buffering and transforming Stream<int>
+/// Base class to handle buffering and transforming `Stream<int>`
 abstract class _ByteStreamTransformer<R>
     extends _BaseStreamTransformer<int, R> {
   _ByteStreamTransformer(super.endian, super.bytesPerElement,

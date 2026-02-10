@@ -15,7 +15,7 @@ extension StringToBytesExtension on String {
   }
 }
 
-/// Extension to add `asString` handling to List<int>
+/// Extension to add `asString` handling to `List<int>`
 extension IntListToStringExtension on List<int> {
   /// Convert the byte list to a string using the specified [encoding].
   /// If, for some reason, you want to manipulate the endianness of the result, then

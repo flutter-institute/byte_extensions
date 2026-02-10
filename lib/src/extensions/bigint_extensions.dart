@@ -53,9 +53,9 @@ extension BigIntToBytesExtension on BigInt {
   }
 }
 
-/// Extension to add our `asBigInt` handling to List<int>
+/// Extension to add our `asBigInt` handling to `List<int>`
 extension IntListToBigIntExtension on List<int> {
-  /// Convert a list of bytes to a BigInt. Endianness can be changed by passing [endian].
+  /// Convert a list of bytes to a `BigInt`. Endianness can be changed by passing [endian].
   /// If you want to treat the list as if it weree signed, then set [signed] to true.
   ///
   /// All values are treated as valid bytes. Any value greater than 0xFF becomes 0xFF and

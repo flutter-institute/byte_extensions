@@ -1,6 +1,6 @@
 name: byte_extensions
 description: Extensions for handling common types and converting them to/from byte arrays
-version: 0.0.3
+version: 0.0.4
 homepage:
 repository: https://github.com/flutter-institute/byte_extensions
 issue_tracker: https://github.com/flutter-institute/byte_extensions/issues
@@ -11,5 +11,5 @@ environment:
 dependencies:
 
 dev_dependencies:
-  lints: ^2.0.0
-  test: ^1.21.6
+  lints: ^6.1.0
+  test: ^1.29.0
